@@ -1,43 +1,49 @@
 package com.nakulsiwach.ecommproj.service;
-
 import com.nakulsiwach.ecommproj.exceptions.APIException;
 import com.nakulsiwach.ecommproj.exceptions.ResourceNotFoundException;
 import com.nakulsiwach.ecommproj.model.Category;
+import com.nakulsiwach.ecommproj.payload.CategoryDTO;
+import com.nakulsiwach.ecommproj.payload.CategoryResponse;
 import com.nakulsiwach.ecommproj.repositories.CategoryRepo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
-    private long nextID = 1L;
-
     @Autowired
     private CategoryRepo categoryRepo;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
-    public List<Category> getAllCategories() {
+    public CategoryResponse getAllCategories() {
         List<Category> categories = categoryRepo.findAll();
         if(categories.isEmpty()) throw new APIException("NO category till now");
-        return categoryRepo.findAll();
+
+        List<CategoryDTO>categoryDTOS = categories.stream()
+                .map(category -> modelMapper.map(category,CategoryDTO.class))
+                .toList();
+        CategoryResponse categoryResponse = new CategoryResponse();
+        categoryResponse.setContent(categoryDTOS);
+        return categoryResponse;
+
     }
 
     @Override
-    public void addCategory(Category category) {
-        Category savedCategory = categoryRepo.findByCategoryName(category.getCategoryName());
-//        if (savedCategory != null) {
-//            throw new APIException("Category already exists with this name:" + category.getCategoryName());
-//        }
-        category.setCategoryId(nextID++);
-        categoryRepo.save(category);
+    public CategoryDTO addCategory(CategoryDTO categoryDTO) {
+        Category category = modelMapper.map(categoryDTO,Category.class);
+        Category categoryFromDB = categoryRepo.findByCategoryName(category.getCategoryName());
+        if (categoryFromDB != null) {
+            throw new APIException("Category already exists with this name:" + category.getCategoryName());
+        }
+        // categoryRepo.save(category) return the saved object
+        Category savedCategory = categoryRepo.save(category);
+        return modelMapper.map(savedCategory,CategoryDTO.class);
     }
 
     @Override
@@ -55,6 +61,5 @@ public class CategoryServiceImpl implements CategoryService{
         category.setCategoryId(categoryId);
         savedCategory = categoryRepo.save(category);
         return savedCategory;
-
     }
 }

@@ -1,14 +1,13 @@
 package com.nakulsiwach.ecommproj.service;
 
 import com.nakulsiwach.ecommproj.model.Category;
-import org.springframework.context.annotation.Bean;
-
-import java.util.List;
+import com.nakulsiwach.ecommproj.payload.CategoryDTO;
+import com.nakulsiwach.ecommproj.payload.CategoryResponse;
 
 
 public interface CategoryService {
-    List<Category> getAllCategories();
-    void addCategory(Category category);
+    CategoryResponse getAllCategories();
+    CategoryDTO addCategory(CategoryDTO categoryDTO);
     String deleteCategory(Long id);
     Category updateCategory(Category category,Long id);
 }
