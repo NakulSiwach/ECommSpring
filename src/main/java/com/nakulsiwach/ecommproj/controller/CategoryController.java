@@ -1,4 +1,5 @@
 package com.nakulsiwach.ecommproj.controller;
+import com.nakulsiwach.ecommproj.config.AppConstants;
 import com.nakulsiwach.ecommproj.payload.CategoryDTO;
 import com.nakulsiwach.ecommproj.payload.CategoryResponse;
 import com.nakulsiwach.ecommproj.service.CategoryService;
@@ -16,9 +17,18 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+//    @GetMapping("echo")
+//    public ResponseEntity<String> echoMessage(@RequestParam(name="message") String message) {
+//        return new ResponseEntity<>("Echoed Mssg : " + message,HttpStatus.OK);
+//    }
+
     @GetMapping("public/categories")
-    public ResponseEntity<CategoryResponse> getAllCategories(){
-        CategoryResponse categoryResponse =  categoryService.getAllCategories();
+    public ResponseEntity<CategoryResponse> getAllCategories(
+            @RequestParam(name = "PageNumber",defaultValue = AppConstants.PAGE_NUMBER)Integer pageNumber,
+            @RequestParam(name= "PageSize",defaultValue = AppConstants.PAGE_SIZE) Integer pageSize,
+            @RequestParam(name ="Sortby",defaultValue = AppConstants.SORT_BY) String sortBy,
+            @RequestParam(name ="SortOrder",defaultValue = AppConstants.SORT_ORDER) String sortOrder){
+        CategoryResponse categoryResponse =  categoryService.getAllCategories(pageNumber,pageSize,sortBy,sortOrder);
         return new ResponseEntity<>(categoryResponse,HttpStatus.OK);
     }
 
