@@ -8,20 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class CategoryController {
-    // to access methods of categoryserive, vahi toh dega categories (get/post..)
+
     @Autowired
     private CategoryService categoryService;
-//    using field injection instead of constructior injection
-//    public CategoryController(CategoryService categoryService) {
-//        this.categoryService = categoryService;
-//    }
 
     @GetMapping("public/categories")
     public ResponseEntity<List<Category>> getAllCategories(){
@@ -39,8 +34,6 @@ public class CategoryController {
         try {
             String Status = categoryService.deleteCategory(categoryId);
             return new ResponseEntity<>(Status, HttpStatus.OK);
-//            return ResponseEntity.ok(Status);
-//            return ResponseEntity.status(HttpStatus.OK).body(Status);
         }
         catch (ResponseStatusException e){
             return new ResponseEntity<>(e.getReason(),e.getStatusCode());
