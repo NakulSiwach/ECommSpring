@@ -1,5 +1,4 @@
 package com.nakulsiwach.ecommproj.controller;
-import com.nakulsiwach.ecommproj.model.Category;
 import com.nakulsiwach.ecommproj.payload.CategoryDTO;
 import com.nakulsiwach.ecommproj.payload.CategoryResponse;
 import com.nakulsiwach.ecommproj.service.CategoryService;
@@ -8,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/api")
@@ -30,15 +29,15 @@ public class CategoryController {
     }
 
     @DeleteMapping("admin/categories/{categoryId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId){
-        String Status = categoryService.deleteCategory(categoryId);
-        return new ResponseEntity<>(Status, HttpStatus.OK);
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId){
+        CategoryDTO deletedCategoryDTO = categoryService.deleteCategory(categoryId);
+        return new ResponseEntity<>(deletedCategoryDTO, HttpStatus.OK);
     }
 
     @PutMapping("public/categories/{categoryID}")
-    public ResponseEntity<String> updateCategory(@Valid @RequestBody Category category, @PathVariable Long categoryID){
-        Category SavedCategory = categoryService.updateCategory(category,categoryID);
-        return new ResponseEntity<>("category has been updated with ID : " + categoryID, HttpStatus.OK);
+    public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryID){
+        CategoryDTO SavedCategoryDTO = categoryService.updateCategory(categoryDTO,categoryID);
+        return new ResponseEntity<>(SavedCategoryDTO, HttpStatus.OK);
     }
 
 }
