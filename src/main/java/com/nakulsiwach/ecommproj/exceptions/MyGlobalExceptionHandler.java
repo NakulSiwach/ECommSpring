@@ -44,6 +44,4 @@ public class MyGlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
     }
 
-
-
 }
