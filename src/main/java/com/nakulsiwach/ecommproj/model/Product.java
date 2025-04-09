@@ -14,11 +14,13 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int productId;
+    private Long productId;
     private String productName;
+    private String image;
     private String description;
-    private int quantity;
+    private Integer quantity;
     private double price;
+    private double discount;
     private double specialPrice;
 
 
